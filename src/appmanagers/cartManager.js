@@ -100,7 +100,6 @@ class CartManager {
   }
 
   async getNextId(allCartsArray) {
-    console.log("allCartsArray en getNextId", allCartsArray);
     let previousId = 0;
     const allIdsArray = allCartsArray.map((product) => product.id);
     allIdsArray.filter((id) => typeof id === "number");

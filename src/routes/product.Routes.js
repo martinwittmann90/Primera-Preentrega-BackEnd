@@ -16,9 +16,9 @@ router.get("/", async (req, res) => {
     const validateNumber = (number) => {
       return number && !isNaN(number) && number > 0;
     };    
-    const isValidLimit = validateNumber(limit);
+    const checkValidLimit = validateNumber(limit);
     products
-      ? isValidLimit
+      ? checkValidLimit
         ? res.status(200).json({
             status: "success",
             payload: products.slice(0, limit),

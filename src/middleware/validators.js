@@ -51,8 +51,4 @@ const checkNumberParams = (req, res, next) => {
   next();
 };
 
-module.exports = {
-  checkRequest,
-  checkNumberParams,
-  checkCodeNotRepeated,
-};
+module.exports = { checkRequest, checkNumberParams, checkCodeNotRepeated, };

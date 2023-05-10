@@ -23,7 +23,6 @@ class CartManager {
 
   async addProductToCart(idCart, idProduct) {
     const allCartsArray = await this.read();
-    /**Busco el carrito a actualizar */
     const cartToUpdate = allCartsArray.find((cart) => cart.id == idCart);
     console.log("cartToUpdate", cartToUpdate);
     if (!cartToUpdate) {
@@ -33,7 +32,6 @@ class CartManager {
         payload: {},
       };
     }
-    /**Busco el producto a agregar. Tiene que existir en mi lista de products.json */
     const allProductsArray = await myProductManager.read();
     const productToAdd = allProductsArray.find(
       (product) => product.id == idProduct
@@ -46,8 +44,6 @@ class CartManager {
         payload: {},
       };
     }
-    /**Agrego el producto al carrito */
-    /**verifico si el producto ya existe en el carrito */
     const productAlreadyInCart = await this.findProductInCart(
       cartToUpdate,
       idProduct
@@ -56,25 +52,21 @@ class CartManager {
 
     if (productAlreadyInCart) {
       const index = cartToUpdate.products.indexOf(productAlreadyInCart);
-      /**Altualizo el producto en el carrito */
       const productData = {
         id: productAlreadyInCart.id,
         quantity: productAlreadyInCart.quantity + 1,
       };
       cartToUpdate.products[index] = productData;
-      /**Actualizo el carrito en el array de carritos*/
       const indexCart = allCartsArray.indexOf(cartToUpdate);
       allCartsArray[indexCart] = cartToUpdate;
       await this.write(allCartsArray);
       return cartToUpdate;
     }
-    /**si el producto no existe lo agrego */
     const productData = {
       id: productToAdd.id,
       quantity: 1,
     };
     cartToUpdate.products.push(productData);
-    /**Actualizo el archivo carts.json */
     const index = allCartsArray.indexOf(cartToUpdate);
     allCartsArray[index] = cartToUpdate;
     await this.write(allCartsArray);

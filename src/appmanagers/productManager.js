@@ -18,7 +18,6 @@ class ProductManager {
       let allProductsArray = await this.read(this.file);
       let nextId = await this.getNextId(allProductsArray);
       newProduct.id = nextId;
-      /**A todos los productos el backend le agrega status=true por default */
       newProduct.status = true;
       allProductsArray.push(newProduct);
       await this.write(allProductsArray);
@@ -32,10 +31,10 @@ class ProductManager {
         (product) => product.id == id
       );
       if (!productToUpdate) {
-        console.log("producto no encontrado", productToUpdate);
+        console.log("Product not found", productToUpdate);
         return {
           status: "error",
-          message: "Sorry, no product found by id: " + id,
+          message: "No product found by id: " + id,
           payload: {},
         };
       }
@@ -54,7 +53,7 @@ class ProductManager {
       if (!productToDelete) {
         return {
           status: "error",
-          message: "Sorry, no product found by id: " + id,
+          message: "No found by id: " + id,
           payload: {},
         };
       }
@@ -65,8 +64,6 @@ class ProductManager {
     }
 
     updateProductFields(productToUpdate, newProduct) {
-      /** 🗨 Los campos que se repiten los actualiza,
-       * los que no (como el id o status) los deja igual */
       const updatedProduct = {
         ...productToUpdate,
         ...newProduct,
@@ -82,7 +79,7 @@ class ProductManager {
           ? (allProductsArray = JSON.parse(allProductsString))
           : (allProductsArray = []);
       } catch (err) {
-        console.log("Error en la lectura del archivo", err);
+        console.log("File read error", err);
       }
       return allProductsArray;
     }
@@ -92,15 +89,13 @@ class ProductManager {
       try {
         await fs.promises.writeFile(this.path, allProductsString);
       } catch (err) {
-        console.log("Error en la escritura", err);
+        console.log("Typing error", err);
       }
     }
 
     async getNextId(allProductsArray) {
       let previousId = 0;
-      // recorro allProductsArray y guardo todos los ids en un array nuevo. Luego busco el máximo
       const allIdsArray = allProductsArray.map((product) => product.id);
-      // me quedo solo con los id numericos, elimino los NaN, null y undefined
       allIdsArray.filter((id) => typeof id === "number");
       if (allIdsArray.length > 0) {
         previousId = Math.max(...allIdsArray);
